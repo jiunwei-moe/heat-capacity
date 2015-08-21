@@ -1,0 +1,75 @@
+#mass,
+#temp-final,
+#time,
+#energy {
+  font-size: 32px;
+  margin: 0;
+}
+
+#temp-slider {
+	margin: 24px auto;
+	padding-bottom: 24px;
+	width: 90%;
+}
+
+#temp-slider .slider-track {
+  /* background: -webkit-linear-gradient(left, blue, silver, red);
+  background: -o-linear-gradient(right, blue, silver, red);
+  background: -moz-linear-gradient(right, blue, silver, red);
+  background: linear-gradient(to right, blue, silver, red); */
+}
+
+#temp-slider .slider-selection {
+	background: red;
+}
+
+#temp-slider .slider-tick {
+	background: silver;
+	opacity: 1;
+}
+
+#temp-slider .slider-handle {
+	background: green;
+	border: 2px solid white;
+	box-shadow: 2px 2px 5px #888888;
+	opacity: 1;
+}
+
+#temp-slider.slider-disabled .slider-handle {
+	background: black;
+}
+
+#temp-slider .tooltip, #temp-final-slider .tooltip {
+	font-size: 16px;
+}
+
+#temp-initial {
+	background: black;
+	border-radius: 4px;
+	color: white;
+	display: inline-block;
+	font-size: 16px;
+	margin: 8px auto;
+	max-width: 200px;
+	padding: 3px 8px;
+	text-align: center;
+	width: auto;
+}
+
+.tab-content {
+	margin: 1em 0;
+}
+
+.result {
+  font-size: 28px;
+  font-weight: 300;
+}
+
+/* Workaround for IE9 */
+
+.in-selection.slider-tick, .tick-slider-selection.slider-selection, .slider-disabled.slider .slider-handle {
+	filter: none;
+}
+
+
+

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Heat Capacity Simulator</title>
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css">
+    <link rel="stylesheet" href="bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.css">
+    <link href="heat-capacity.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+
+    <div class="container no-selection">
+
+      <nav class="navbar navbar-inverse">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            Heat Capacity Simulator
+          </a>
+        </div>
+      </nav>
+
+      <div class="row">
+
+        <div class="col-md-3 text-center">
+
+          <p><canvas id="canvas" width="180" height="480"></canvas></p>
+
+        </div><!--/.col-md-3-->
+
+        <div class="col-md-9">
+
+          <div class="panel panel-default text-center">
+            <div class="panel-heading">
+              <h3 class="panel-title">Temperature (T)</h3>
+            </div>
+            <div class="panel-body">
+              <input id="temp" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="[25, 80]" />
+            </div><!--/.panel-body-->
+          </div><!--/.panel-->
+
+          <div class="row text-center">
+
+            <div class="col-md-4">
+
+              <div class="panel panel-default text-center">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Time Taken (&Delta;t)</h3>
+                </div>
+                <div class="panel-body">
+                  <p id="time">0 s</p>
+                </div><!--/.panel-body-->
+              </div><!--/.panel-->
+
+              <div class="panel panel-default text-center">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Energy Absorbed (Q)</h3>
+                </div>
+                <div class="panel-body">
+                  <p id="energy">0 J</p>
+                </div><!--/.panel-body-->
+              </div><!--/.panel-->
+
+              <div class="hidden">
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Mass (m)</h3>
+                  </div>
+                  <div class="panel-body">
+
+                    <p id="mass">N/A</p>
+
+                  </div><!--/.panel-body-->
+                </div><!--/.panel-->
+
+                <p><i>Mass can only be changed when recording is not taking place.</i></p>
+
+                <p><div class="btn-group-vertical" role="group">
+                  <div class="btn-group" role="group">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="material-menu" data-toggle="dropdown" aria-expanded="true">
+                      Brick
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="material-menu">
+                      <li id="material-brick" role="presentation"><a id="material-brick" role="menuitem" tabindex="-1" href="#">Brick</a></li>
+                      <li id="material-chocolate" role="presentation"><a id="material-chocolate" role="menuitem" tabindex="-1" href="#">Chocolate</a></li>
+                      <li id="material-concrete" role="presentation"><a id="material-concrete" role="menuitem" tabindex="-1" href="#">Concrete</a></li>
+                      <li id="material-cupronickel" role="presentation"><a id="material-concrete" role="menuitem" tabindex="-1" href="#">Cupronickel</a></li>
+                      <li id="material-gold" role="presentation"><a id="material-concrete" role="menuitem" tabindex="-1" href="#">Gold</a></li>
+                      <li id="material-water" role="presentation"><a id="material-concrete" role="menuitem" tabindex="-1" href="#">Water</a></li>
+                      <li id="material-wood" role="presentation"><a id="material-concrete" role="menuitem" tabindex="-1" href="#">Wood</a></li>
+                    </ul>
+                  </div>
+                  <button id="mass-add" type="button" class="btn btn-md btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Mass</button>
+                  <button id="mass-remove" type="button" class="btn btn-md btn-default"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Remove Mass</button>
+                </div></p>
+
+              </div>
+
+            </div><!--/.col-md-4-->
+
+            <div class="col-md-8">
+
+              <div role="tabpanel">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                  <li role="presentation" class="active"><a href="#brickTab" aria-controls="brickTab" role="tab" data-toggle="tab">Brick</a></li>
+                  <li role="presentation"><a href="#concreteTab" aria-controls="concreteTab" role="tab" data-toggle="tab">Concrete</a></li>
+                  <li role="presentation"><a href="#waterTab" aria-controls="waterTab" role="tab" data-toggle="tab">Water</a></li>
+                  <li role="presentation"><a href="#woodTab" aria-controls="woodTab" role="tab" data-toggle="tab">Wood</a></li>
+                  <li role="presentation"><a href="#mysteryTab" aria-controls="mysteryTab" role="tab" data-toggle="tab">Self-Assessment</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane fade in active" id="brickTab">
+                    <p>How long would it take to heat up...</p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <p>...100g of bricks?</p>
+                            <p class="result"><span id="brick100Result">No Result Yet</span></p>
+                            <p><button id="brick100" type="button" class="btn btn-md btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start Mission</button></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <p>...200g of bricks?</p>
+                            <p class="result"><span id="brick200Result">No Result Yet</span></p>
+                            <p><button id="brick200" type="button" class="btn btn-md btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start Mission</button></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane fade" id="concreteTab">
+                    <p>How long would it take to heat up...</p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <p>...100g of concrete?</p>
+                            <p class="result"><span id="concrete100Result">No Result Yet</span></p>
+                            <p><button id="concrete100" type="button" class="btn btn-md btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start Mission</button></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <p>...200g of concrete?</p>
+                            <p class="result"><span id="concrete200Result">No Result Yet</span></p>
+                            <p><button id="concrete200" type="button" class="btn btn-md btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start Mission</button></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane fade" id="waterTab">
+                    <p>How long would it take to heat up...</p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <p>...100g of water?</p>
+                            <p class="result"><span id="water100Result">No Result Yet</span></p>
+                            <p><button id="water100" type="button" class="btn btn-md btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start Mission</button></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <p>...200g of water?</p>
+                            <p class="result"><span id="water200Result">No Result Yet</span></p>
+                            <p><button id="water200" type="button" class="btn btn-md btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start Mission</button></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane fade" id="woodTab">
+                    <p>How long would it take to heat up...</p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <p>...100g of wood?</p>
+                            <p class="result"><span id="wood100Result">No Result Yet</span></p>
+                            <p><button id="wood100" type="button" class="btn btn-md btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start Mission</button></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <p>...200g of wood?</p>
+                            <p class="result"><span id="wood200Result">No Result Yet</span></p>
+                            <p><button id="wood200" type="button" class="btn btn-md btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start Mission</button></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane fade" id="mysteryTab">Mystery!</div>
+                </div>
+
+              </div>
+
+            </div><!--/.col-md-8-->
+
+          </div>
+
+          <div class="hidden row">
+
+            <div class="col-md-4">
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Temperature (T)</h3>
+                </div>
+                <div class="panel-body">
+                  <div class="btn-group-vertical" role="group">
+                    <p id="temperature">N/A</p>
+                    <!--<button id="temperature-reset" type="button" class="btn btn-md btn-default"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Room Temp</button>-->
+                  </div><!--/.btn-group-vertical-->
+                </div><!--/.panel-body-->
+              </div><!--/.panel-->
+
+              <p><div class="btn-group-vertical" role="group">
+                <button id="temperature-reset" type="button" class="btn btn-md btn-default"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Reset to 25 &deg;C</button>
+                <button id="energy-add" type="button" class="btn btn-md btn-default"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add 100J</button>
+                <button id="energy-remove" type="button" class="btn btn-md btn-default"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Remove 100J</button>
+              </div></p>
+
+            </div><!--/.col-md-3-->
+
+            <div class="col-md-4">
+
+              <p><div class="btn-group-vertical" role="group">
+                <button id="recording-start" type="button" class="btn btn-md btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start Recording</button>
+                <button id="recording-stop" type="button" class="btn btn-md btn-danger"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Stop Recording</button>
+                <button id="reset" type="button" class="btn btn-md btn-default"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Reset Table</button>
+              </div></p>
+
+            </div><!--/.col-md-3-->
+
+          </div><!--/.row-->
+        
+          <div class="hidden row">
+
+            <p><table id="results" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Material</th>
+                  <th>m/kg</th>
+                  <th>T<sub>initial</sub>/&deg;C</th>
+                  <th>T<sub>final</sub>/&deg;C</th>
+                  <th>&Delta;T/&deg;C</th>
+                  <th>Q/J</th>
+                  <th>\(Q \over &Delta;T\)/J &deg;C<sup>-1</sup></th>
+                  <th>\(Q \over m&Delta;T\)/J kg<sup>-1</sup> &deg;C<sup>-1</sup></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="9">No results recorded yet.</td></tr>
+              </tbody>
+            </table></p>
+
+          </div><!--/.row-->
+
+        </div><!--/.col-md-9-->
+
+      </div><!--/.row-->
+
+    </div><!--/.container-fluid-->
+
+    <div id="preload" style="visibility: hidden;">
+
+      <img id="arrow-down" src="assets/images/arrow-down.png">
+      <img id="arrow-up" src="assets/images/arrow-up.png">
+
+      <img id="jar-back" src="assets/images/jar-back.png">
+      <img id="jar-front" src="assets/images/jar-front.png">
+
+      <img id="brick" src="assets/images/brick-1.png">
+      <img id="concrete" src="assets/images/concrete-1.png">
+      <img id="chocolate" src="assets/images/chocolate-1.png">
+      <img id="chocolate-liquid-1" src="assets/images/chocolate-liquid-1.png">
+      <img id="chocolate-liquid-2" src="assets/images/chocolate-liquid-2.png">
+      <img id="chocolate-liquid-3" src="assets/images/chocolate-liquid-3.png">
+      <img id="chocolate-liquid-4" src="assets/images/chocolate-liquid-4.png">
+      <img id="water-1" src="assets/images/water-1.png">
+      <img id="water-2" src="assets/images/water-2.png">
+      <img id="water-3" src="assets/images/water-3.png">
+      <img id="water-4" src="assets/images/water-4.png">
+      <img id="wood" src="assets/images/wood-1.png">
+
+      <img id="cupronickel" src="assets/images/cupronickel-1.png">
+      <img id="gold" src="assets/images/gold-1.png">
+      
+    </div>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+    <script src="bower_components/fabric/dist/fabric.js"></script>
+    <script src="heat-capacity.js"></script>
+  </body>
+</html>
